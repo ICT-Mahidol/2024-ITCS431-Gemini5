@@ -1,0 +1,38 @@
+name: Java CI
+
+on:
+  push:
+    branches:
+      - Nichakul
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: '11'
+
+    - name: Detect and Set Working Directory
+      id: detect_dir
+      run: |
+        WORK_DIR="HolidayTravelVehicles"
+
+        if [ -d "$WORK_DIR" ]; then
+          echo "Found directory: $WORK_DIR"
+          echo "BUILD_DIR=$WORK_DIR" >> $GITHUB_ENV
+        else
+          echo "Error: Expected directory $WORK_DIR not found!"
+          exit 1
+        fi
+
+    - name: Compile and Run Java
+      run: |
+        cd "$BUILD_DIR"
+        javac -d . *.java
+        java Main  # Replace 'Main' with the actual class name
